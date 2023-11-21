@@ -37,13 +37,27 @@ def find_git_repository():
 
         current_directory = parent_directory
 
-# Example usage
+def get_local_branches():
+    found_git_repository = find_git_repository()
+    
+    if not found_git_repository:
+        return None
+
+    git_refs_path = os.path.join(found_git_repository, 'refs', 'heads')
+
+    if not os.path.exists(git_refs_path):
+        print("./git/refs/heads not found")
+        return None
+
+    local_branches = [branch for branch in os.listdir(git_refs_path) if os.path.isfile(os.path.join(git_refs_path, branch))] #Using os.path.isfile to ensure that the branches are not confused with directories
+    return local_branches
 
 
 def main():
     found_git_repository = find_git_repository()
     print(f"Found Git repository at: {found_git_repository}") 
     # Your script logic goes here
+    print(get_local_branches())
 
 if __name__ == "__main__":
     sys.exit(main())
